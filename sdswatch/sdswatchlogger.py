@@ -5,6 +5,7 @@ SDS Watch Logger module for Python 3
 import os
 import logging
 import urllib.request
+import time
 
 class SDSWatchLogger:
   __sdswatch_logger = None
@@ -123,4 +124,4 @@ class SDSWatchLogger:
     # configure SDS Watch Logger with the above information
     sdswatch_logger.setLevel(level)
     sdswatch_logger.addHandler(sdswatch_handler)
-
+    logging.Formatter.converter = time.gmtime
