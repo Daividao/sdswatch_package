@@ -18,7 +18,7 @@ class SDSWatchAgent:
       """
       current_time = time.localtime()
       current_time = time.strftime('%Y-%m-%dT%H:%M:%S', current_time)
-      path_data = "/usr/local/var/lib/" + str(current_time) + "/"
+      path_data = "/usr/local/var/lib/logstash_path_data/" + str(current_time) + "/"
       config_file = (os.path.dirname(os.path.realpath(__file__)) +
                      "/configs/" +
                      self.pipeline.lower() +
