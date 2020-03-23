@@ -1,4 +1,4 @@
-from sdswatchlogger import SDSWatchLogger
+from sdswatch import SDSWatchLogger
 from example_auxiliary_module import download, preprocess
 
 if __name__ == '__main__':

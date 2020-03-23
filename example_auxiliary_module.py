@@ -1,4 +1,4 @@
-from sdswatchlogger import SDSWatchLogger
+from sdswatch import SDSWatchLogger
 
 def download():
   sdswatch_logger = SDSWatchLogger.getLogger()
