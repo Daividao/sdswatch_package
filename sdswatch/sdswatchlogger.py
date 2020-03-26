@@ -80,4 +80,7 @@ class SDSWatchLogger:
       key (str or number): value of key token
       value (str or number): value of value token
     """
+    if not SDSWatchLogger.__sdswatch_configured:
+      raise Exception("Please configure SDS Watch Logger before logging")
+
     SDSWatchLogger.__logger.info('', extra = {"key" : key, "value" : value})
