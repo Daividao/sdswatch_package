@@ -14,7 +14,7 @@ class SDSWatchLogger:
   do visualization in real time. 
   """
   
-  def __init__(self, component, component_id, local_log_filepath):
+  def __init__(self, component, component_id, local_log_filedir):
     """
     SDS Watch Logger constructor.
     
@@ -26,12 +26,11 @@ class SDSWatchLogger:
     Args:
       component (str): required value for each SDS Watch log line
       component_id (str): requred value for each SDS Watch log line
-      local_log_filepath (str): a full path to the location of log files on your
-        local machine, and the file should have ".sdswatch.log" at the end"
+      local_log_filedir (str): a full path to the current directory of the main module
+                          which is required to be directly contained in the job directory.
 
     Raises:
-      Exception if SDSWatchLogger.__sdswatch_logger already exists or 
-        invalid arguments for local_log_filepath
+      Exception if SDSWatchLogger.__sdswatch_logger already exists
     """
     if SDSWatchLogger.__sdswatch_logger != None:
       raise Exception("you can only instantiate SDSWatch once, please use "
@@ -39,12 +38,8 @@ class SDSWatchLogger:
     else:
       __sdswatch_logger = self
 
-    if not local_log_filepath.endswith(".sdswatch.log"):
-      raise Exception("SDS Watch requires \'local_log_filepath\' to have "
-                           + "\'.sdswatch.log\'at the end")
-
     self.logger = logging.getLogger("sdswatch")
-    self.__configure(component, component_id, local_log_filepath)
+    self.__configure(component, component_id, local_log_filedir)
     
   @staticmethod
   def getLogger():
@@ -72,7 +67,7 @@ class SDSWatchLogger:
     """
     self.logger.info('', extra = {"key" : key, "value" : value})
     
-  def __configure(self, component, component_id, local_log_filepath):
+  def __configure(self, component, component_id, local_log_filedir):
     """
     __configure configures the SDS Watch Logger by defining
     the format of each log line and where to store it. Regarding the
@@ -88,15 +83,16 @@ class SDSWatchLogger:
     Args:
       componen (str): required value for each SDS Watch log line
       component_id (str): required value for each SDS Watch log line
-      local_log_filepath (str): a full path to the location of output file, and
-        the file should have ".sdswatch.log" at the end
+      local_log_filedir (str): a full path to the current directory of the main module
+                   which is required to be directly contained inside the job directory.
     """
     # get public ip address
     ip_address = urllib.request.urlopen('https://ifconfig.me').read().decode('utf8')
 
     # if the directory containing the output log file doesn't exist,
     # create on
-    os.makedirs(os.path.dirname(local_log_filepath), exist_ok = True)
+    os.makedirs(local_log_filedir, exist_ok = True)
+    local_log_filepath = os.path.join(local_log_filedir, "sdswatch.log")
 
     # by default, SDS Watch Logger uses info level for logging
     level = logging.INFO
