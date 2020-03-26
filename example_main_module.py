@@ -1,4 +1,4 @@
-from sdswatch import SDSWatchLogger
+from sdswatch.sdswatchlogger import SDSWatchLogger as sdsw_logger
 from example_auxiliary_module import download, preprocess
 
 if __name__ == '__main__':
@@ -12,12 +12,13 @@ if __name__ == '__main__':
   # "jobs/2020/03/17/07/35/job1/example_main_module.py
   # then SDS Watch Logger will send log to
   # "jobs/2020/03/17/07/35/job1/"sdswatch.log"
-  # Other paths won't work. 
-  sdswatch_logger = SDSWatchLogger(component = "optimization",
+  # Other paths won't work.
+  import os 
+  sdsw_logger.configure(component = "optimization",
                                    component_id = "optimization_xlk2",
-                                   local_log_filedir = os.path.dirname(__file__))
+                                   local_log_filedir = os.path.dirname(os.path.abspath(__file__)))
   # logging to sdswatch
-  sdswatch_logger.log("step", "start_main")
+  sdsw_logger.log("step", "start_main")
   
   # go to another module, please open example_auxiliary_module.py to see how SDSWatchLogger is
   # called in different modules from the main
@@ -25,6 +26,6 @@ if __name__ == '__main__':
   preprocess()
 
   # logging to sdswatch
-  sdswatch_logger.log("step", "end_main")
+  sdsw_logger.log("step", "end_main")
 
 
