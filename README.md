@@ -1,3 +1,3 @@
-# SDSWatchLogger Package
+# SDSWatch Package
 
 
