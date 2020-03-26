@@ -15,7 +15,7 @@ if __name__ == '__main__':
   # Other paths won't work. 
   sdswatch_logger = SDSWatchLogger(component = "optimization",
                                    component_id = "optimization_xlk2",
-                                   local_log_filepath = os.path.dirname(__file__))
+                                   local_log_filedir = os.path.dirname(__file__))
   # logging to sdswatch
   sdswatch_logger.log("step", "start_main")
   
