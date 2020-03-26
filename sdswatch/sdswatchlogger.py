@@ -27,7 +27,7 @@ class SDSWatchLogger:
       component (str): required value for each SDS Watch log line
       component_id (str): requred value for each SDS Watch log line
       local_log_filepath (str): a full path to the location of log files on your
-        local machine, and the file should have ".sdswatch.csv" at the end"
+        local machine, and the file should have ".sdswatch.log" at the end"
 
     Raises:
       Exception if SDSWatchLogger.__sdswatch_logger already exists or 
@@ -39,9 +39,9 @@ class SDSWatchLogger:
     else:
       __sdswatch_logger = self
 
-    if not local_log_filepath.endswith(".sdswatch.csv"):
+    if not local_log_filepath.endswith(".sdswatch.log"):
       raise Exception("SDS Watch requires \'local_log_filepath\' to have "
-                           + "\'.sdswatch.csv\'at the end")
+                           + "\'.sdswatch.log\'at the end")
 
     self.logger = logging.getLogger("sdswatch")
     self.__configure(component, component_id, local_log_filepath)
@@ -89,7 +89,7 @@ class SDSWatchLogger:
       componen (str): required value for each SDS Watch log line
       component_id (str): required value for each SDS Watch log line
       local_log_filepath (str): a full path to the location of output file, and
-        the file should have ".sdswatch.csv" at the end
+        the file should have ".sdswatch.log" at the end
     """
     # get public ip address
     ip_address = urllib.request.urlopen('https://ifconfig.me').read().decode('utf8')
