@@ -8,68 +8,13 @@ import urllib.request
 import time
 
 class SDSWatchLogger:
-  __sdswatch_logger = None
-  """
-  This is a class for logging into SDSWatch ElasticSearch database to 
-  do visualization in real time. 
-  """
+  __logger = logging.getLogger("sdswatch")
+  __sdswatch_configured = False
   
-  def __init__(self, component, component_id, local_log_filedir):
-    """
-    SDS Watch Logger constructor.
-    
-    Notes:
-      You can only instatiate only once. To use
-        SDS Watch Logger in multiple modules, instantiate once in your main module
-        and use SDSWatchLogger.getLogger() in other modules.
-
-    Args:
-      component (str): required value for each SDS Watch log line
-      component_id (str): requred value for each SDS Watch log line
-      local_log_filedir (str): a full path to the current directory of the main module
-                          which is required to be directly contained in the job directory.
-
-    Raises:
-      Exception if SDSWatchLogger.__sdswatch_logger already exists
-    """
-    if SDSWatchLogger.__sdswatch_logger != None:
-      raise Exception("you can only instantiate SDSWatch once, please use "
-                      + "SDSWatchLogger.getLogger() instead")
-    else:
-      __sdswatch_logger = self
-
-    self.logger = logging.getLogger("sdswatch")
-    self.__configure(component, component_id, local_log_filedir)
-    
   @staticmethod
-  def getLogger():
+  def configure(component, component_id, local_log_filedir):
     """
-    Returns:
-      SDSWatchLogger (obj): the one and only instance of SDSWatchLogger
-
-    Raises:
-      Exception if SDSWatchLogger hasn't been instantiated
-    """
-    if SDSWatchLogger.__sdswatch_loger == None:
-      raise Exception("SDS Watch Logger hasn't been created, please instantiate it first")
-    return SDSWatchLogger.__sdswatch_logger
-
-  def log(self, key, value):
-    """
-    Write a log line to the file specified in the constructor. In particular,
-    here is the schema or structure of the log line inside that file:
-       <timestamp>,<public ip address>,<component>,<component_id>,<key>,<value>
-    Since key token and value token  are flexible values, developers need to provide them
- 
-    Args:
-      key (str or number): value of key token
-      value (str or number): value of value token
-    """
-    self.logger.info('', extra = {"key" : key, "value" : value})
-    
-  def __configure(self, component, component_id, local_log_filedir):
-    """
-    __configure configures the SDS Watch Logger by defining
+    configure configures the SDS Watch Logger by defining
     the format of each log line and where to store it. Regarding the
     format of the log line, SDS Watch requires the following schema:
     '<timestamp>', '<public ip>', '<component>', '<component_id>', '<key>', '<value>'
@@ -86,6 +31,9 @@ class SDSWatchLogger:
       local_log_filedir (str): a full path to the current directory of the main module
                    which is required to be directly contained inside the job directory.
     """
+    if SDSWatchLogger.__sdswatch_configured:
+      raise Exception("SDS Watch has already been configured, and it cannot be configured again")
+    
     # get public ip address
     ip_address = urllib.request.urlopen('https://ifconfig.me').read().decode('utf8')
 
@@ -114,10 +62,22 @@ class SDSWatchLogger:
     sdswatch_handler.setLevel(level)
     sdswatch_handler.setFormatter(formatter)
 
-    # get "SDS Watch" logger object
-    sdswatch_logger = self.logger
-
     # configure SDS Watch Logger with the above information
-    sdswatch_logger.setLevel(level)
-    sdswatch_logger.addHandler(sdswatch_handler)
+    SDSWatchLogger.__logger.setLevel(level)
+    SDSWatchLogger.__logger.addHandler(sdswatch_handler)
     logging.Formatter.converter = time.gmtime
+    SDSWatchLogger.__sdswatch_configured = True
+    
+  @staticmethod
+  def log(key, value):
+    """
+    Write a log line to the file specified in the constructor. In particular,
+    here is the schema or structure of the log line inside that file:
+       <timestamp>,<public ip address>,<component>,<component_id>,<key>,<value>
+    Since key token and value token  are flexible values, developers need to provide them
+ 
+    Args:
+      key (str or number): value of key token
+      value (str or number): value of value token
+    """
+    SDSWatchLogger.__logger.info('', extra = {"key" : key, "value" : value})
