@@ -59,10 +59,10 @@ class SDSWatchAgent:
         dst_conf.write("    hosts => {}\n".format("\"" + self.elasticsearch_ip + "\""))
         dst_conf.write("    index => \"sdswatch\"\n")
         dst_conf.write("  }\n")
-      else:
-        dst_conf.write("  stdout {\n")
-        dst_conf.write("    codec => rubydebug\n")
-        dst_conf.write("  }\n")
+     
+      dst_conf.write("  stdout {\n")
+      dst_conf.write("    codec => rubydebug\n")
+      dst_conf.write("  }\n")
         
       dst_conf.write("}\n\n")
           
