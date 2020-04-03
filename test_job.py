@@ -43,10 +43,11 @@ if __name__ == '__main__':
   
   # logging to sdswatch
   sdsw_logger.log("step", "start")
-  time.sleep(30)
+  
+  import time
   
   # SIMULATION for demonstration purpose, since each component has different steps
-  import time
+  time.sleep(30)
   for i in range(example_steps[i_component]):
     sdsw_logger.log("step", str(i))
     time.sleep(5)
