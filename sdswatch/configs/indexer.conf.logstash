@@ -1,10 +1,12 @@
-input {
-  file {
-    path => "/Users/**/Desktop/sdswatch_logs/**/*.sdswatch.csv"
-    start_position => "beginning"
-    sincedb_path => "/Users/**/Desktop/sdswatch_logs/null"
-  }
-}
+## Example
+#
+#input {
+#  file {
+#    path => "/Users/**/Desktop/sdswatch_logs/**/*.sdswatch.csv"
+#    start_position => "beginning"
+#    sincedb_path => "/Users/**/Desktop/sdswatch_logs/null"
+#  }
+#}
 
 filter {
   csv {
@@ -37,11 +39,13 @@ filter {
   }
 }
 
-output {
- #elasticsearch {
- #   hosts => "http://localhost:9200" it should be a port to hysds elasticsearch database
- #   index => "sdswatch"
- #}        
-  stdout {codec => rubydebug}
-}
+## Example
+#
+#output {
+# elasticsearch {
+#    hosts => "http://localhost:9200" it should be a port to hysds elasticsearch database
+#    index => "sdswatch"
+# }        
+#  stdout {codec => rubydebug}
+#}
 
