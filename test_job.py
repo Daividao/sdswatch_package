@@ -21,7 +21,7 @@ if __name__ == '__main__':
   i_component = random.choice(range(len(example_components)))
   i_component_id = random.choice(range(len(example_component_ids[i_component])))
   component = example_components[i_component]
-  component_id = example_components_ids[i_component][i_component_id]
+  component_id = example_component_ids[i_component][i_component_id]
 
 
   # instantiate SDS Watch Logger for the first time.
