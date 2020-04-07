@@ -1,7 +1,7 @@
 from sdswatch.sdswatchlogger import SDSWatchLogger as sdsw_logger
 
 """
-This code is used to create fake jobs that produces SDSWatch logs for test_verdi_job_worker.py
+This code is used to create fake jobs with fake metrics that produces SDSWatch logs for test_verdi_job_worker.py
 """
 
 if __name__ == '__main__':
@@ -25,17 +25,6 @@ if __name__ == '__main__':
 
 
   # instantiate SDS Watch Logger for the first time.
-  # IMPORTANT NOTE: SDS Watch assumes the log file is contained in
-  # the job directory, so it's important that you have a main module
-  # is also contained in the job directory, and instantiate the SDS Watch Logger
-  # with the absolute path to the current directory of the main module.
-  # For example:
-  # if your job name is "job1", then in Verdi, you'll have
-  # "jobs/2020/03/17/07/35/job1/example_main_module.py
-  # then SDS Watch Logger will send log to
-  # "jobs/2020/03/17/07/35/job1/"sdswatch.log"
-  # Other paths won't work.
-  # instantiate sdswatch logger
   import os
   sdsw_logger.configure(component = component,
                         component_id = component_id,
@@ -47,9 +36,32 @@ if __name__ == '__main__':
   import time
   
   # SIMULATION for demonstration purpose, since each component has different steps
-  time.sleep(30)
-  for i in range(example_steps[i_component]):
+  time.sleep(25)
+  for i in range(1, example_steps[i_component]):
     sdsw_logger.log("step", str(i))
+    if i_component == 0:
+       sdsw_logger.log("total_attempted_downloads", "50")
+       for i in range(50):
+         if i % 2 == 0:
+           sdsw_logger.log("download_ok", "1")
+         else:
+           sdsw_logger.log("download_ok", "0")
+    elif i_component == 1:
+        sdsw_logger.log("total_attempted_process", "20")
+        for i in range(20):
+          if i % 4 == 0:
+            sdsw_logger.log("processed", "0")
+          else:
+            sdsw_logger.log("processed", "1")
+          
+    elif i_component == 2:
+        sdsw_logger.log("total_attempted_receivers", "40")
+        for i in range(40):
+          if i % 5 == 0:
+            sdsw_logger.log("received", "1")
+          else:
+            sdsw_logger.log("received", "0")
+    sdsw_logger.log("LoL", "LoL")
     time.sleep(5)
   
   # logging to sdswatch
