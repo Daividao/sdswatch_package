@@ -35,6 +35,7 @@ filter {
 
   date {
     match => ["time_created", "yyyy-MM-dd HH:mm:ss.SSS", "yyyy-MM-dd HH:mm:ss,SSS"]
+    timezone => "UTC"
     target => "time_created"
   }
 }
