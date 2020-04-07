@@ -36,7 +36,10 @@ while i < total_jobs:
   subprocess.run(["cp", "test_job.py", path + job_dir + ".py"]) 
  
   # run sample PGE code
-  subprocess.run(["python3", path + job_dir + ".py"])
+  pge_process = subprocess.Popen(["python3", path + job_dir + ".py"])
+  
+  # wait until the pge is done
+  pge_process.wait()
   
   # kill SDS Watch Agent
   sdswatch_agent.stop()
