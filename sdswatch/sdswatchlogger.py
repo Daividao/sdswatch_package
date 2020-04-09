@@ -12,12 +12,12 @@ class SDSWatchLogger:
   __sdswatch_configured = False
   
   @staticmethod
-  def configure(component, component_id, local_log_filedir):
+  def configure(source_type, source_id, local_log_filedir):
     """
     configure configures the SDS Watch Logger by defining
     the format of each log line and where to store it. Regarding the
     format of the log line, SDS Watch requires the following schema:
-    '<timestamp>', '<public ip>', '<component>', '<component_id>', '<key>', '<value>'
+    '<timestamp>', '<host>', '<source_type>', '<source_id>', '<metric_key>', '<metric_value>'
     where comma is delimiter and each schema token needs to be quoted to allow commas within
     the quotes
 
@@ -26,8 +26,8 @@ class SDSWatchLogger:
         anywhere else except the constructor
 
     Args:
-      componen (str): required value for each SDS Watch log line
-      component_id (str): required value for each SDS Watch log line
+      source_type (str): required value for each SDS Watch log line
+      source_id (str): required value for each SDS Watch log line
       local_log_filedir (str): a full path to the current directory of the main module
                    which is required to be directly contained inside the job directory.
     """
@@ -35,7 +35,7 @@ class SDSWatchLogger:
       raise Exception("SDS Watch has already been configured, and it cannot be configured again")
     
     # get public ip address
-    ip_address = urllib.request.urlopen('https://ifconfig.me').read().decode('utf8')
+    host = urllib.request.urlopen('https://ifconfig.me').read().decode('utf8')
 
     # if the directory containing the output log file doesn't exist,
     # create on
@@ -48,11 +48,11 @@ class SDSWatchLogger:
     # define the log format. By default, python logging module already provides
     # timestamp when logging
     log_format = ("\'%(asctime)s.%(msecs)03d\',"
-                  "\'" + ip_address + "\',"
-                  "\'" + component + "\',"
-                  "\'" + component_id + "\',"
-                  "\'%(key)s\',"
-                  "\'%(value)s\'")
+                  "\'" + host + "\',"
+                  "\'" + source_type + "\',"
+                  "\'" + source_id + "\',"
+                  "\'%(metric_key)s\',"
+                  "\'%(metric_value)s\'")
     datefmt = '%Y-%m-%d %H:%M:%S'
     formatter = logging.Formatter(log_format, datefmt=datefmt)
 
@@ -69,18 +69,18 @@ class SDSWatchLogger:
     SDSWatchLogger.__sdswatch_configured = True
     
   @staticmethod
-  def log(key, value):
+  def log(metric_key, metric_value):
     """
     Write a log line to the file specified in the constructor. In particular,
     here is the schema or structure of the log line inside that file:
-       <timestamp>,<public ip address>,<component>,<component_id>,<key>,<value>
+       <timestamp>,<host>,<source_type>,<source_id>,<metric_key>,<metric_value>
     Since key token and value token  are flexible values, developers need to provide them
  
     Args:
-      key (str or number): value of key token
-      value (str or number): value of value token
+      metric_key (str or number): value of key token
+      metric_value (str or number): value of value token
     """
     if not SDSWatchLogger.__sdswatch_configured:
       raise Exception("Please configure SDS Watch Logger before logging")
 
-    SDSWatchLogger.__logger.info('', extra = {"key" : key, "value" : value})
+    SDSWatchLogger.__logger.info('', extra = {"metric_key" : key, "metric_value" : value})
