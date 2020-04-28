@@ -21,10 +21,6 @@ class SDSWatchLogger:
     where comma is delimiter and each schema token needs to be quoted to allow commas within
     the quotes
 
-    Notes:
-      This function is supposed to be private, and should not be called
-        anywhere else except the constructor
-
     Args:
       source_type (str): required value for each SDS Watch log line
       source_id (str): required value for each SDS Watch log line
@@ -37,10 +33,18 @@ class SDSWatchLogger:
     # get public ip address
     host = urllib.request.urlopen('https://ifconfig.me').read().decode('utf8')
 
+    # preprocess arguments:
+    source_type = source_type.strip().lower()
+    source_id = source_id.strip().lower()
+    
     # if the directory containing the output log file doesn't exist,
     # create on
     os.makedirs(local_log_filedir, exist_ok = True)
-    local_log_filepath = os.path.join(local_log_filedir, "sdswatch.log")
+    local_log_filepath = ""
+    if source_type == "worker":
+      local_log_filepath = os.path.join(local_log_filedir, "job_worker.sdswatch.log")
+    else:
+      local_log_filepath = os.path.join(local_log_filedir, "pge.sdswatch.log")
 
     # by default, SDS Watch Logger uses info level for logging
     level = logging.INFO
@@ -51,8 +55,8 @@ class SDSWatchLogger:
                   "\'" + host + "\',"
                   "\'" + source_type + "\',"
                   "\'" + source_id + "\',"
-                  "\'%(metric_key)s\',"
-                  "\'%(metric_value)s\'")
+                  "%(metric_key)s,"
+                  "%(metric_value)s")
     datefmt = '%Y-%m-%d %H:%M:%S'
     formatter = logging.Formatter(log_format, datefmt=datefmt)
 
@@ -83,4 +87,4 @@ class SDSWatchLogger:
     if not SDSWatchLogger.__sdswatch_configured:
       raise Exception("Please configure SDS Watch Logger before logging")
 
-    SDSWatchLogger.__logger.info('', extra = {"metric_key" : key, "metric_value" : value})
+    SDSWatchLogger.__logger.info('', extra = {"metric_key" : metric_key, "metric_value" : metric_value})
