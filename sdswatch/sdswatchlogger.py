@@ -1,5 +1,5 @@
 """
-SDS Watch Logger module for Python 3
+SDS Watch Logger module for pge
 """
 
 import os
@@ -12,45 +12,37 @@ class SDSWatchLogger:
   __sdswatch_configured = False
   
   @staticmethod
-  def configure(source_type, source_id, local_log_filedir):
+  def configure_generic_logger(file_dir, name, source_type, source_id):
     """
-    configure configures the SDS Watch Logger by defining
-    the format of each log line and where to store it. Regarding the
-    format of the log line, SDS Watch requires the following schema:
-    '<timestamp>', '<host>', '<source_type>', '<source_id>', '<metric_key>', '<metric_value>'
-    where comma is delimiter and each schema token needs to be quoted to allow commas within
-    the quotes
+    Configure a logger to write log lines to /file_dir/name.sdswatch.log with
+    format <timestamp>, <host>, <source_type>, <source_id>, <metric_key>, <metric_value>
 
     Args:
+      file_dir (str): a full path to where to store the log file
+      name (str): name of the log
       source_type (str): required value for each SDS Watch log line
       source_id (str): required value for each SDS Watch log line
-      local_log_filedir (str): a full path to the current directory of the main module
-                   which is required to be directly contained inside the job directory.
     """
+    
     if SDSWatchLogger.__sdswatch_configured:
       raise Exception("SDS Watch has already been configured, and it cannot be configured again")
+
+    SDSWatchLogger.__sdswatch_configured = True
     
     # get public ip address
     host = urllib.request.urlopen('https://ifconfig.me').read().decode('utf8')
 
-    # preprocess arguments:
+    # preprocess arguments
     source_type = source_type.strip().lower()
     source_id = source_id.strip().lower()
     
     # if the directory containing the output log file doesn't exist,
-    # create on
-    os.makedirs(local_log_filedir, exist_ok = True)
-    local_log_filepath = ""
-    if source_type == "worker":
-      local_log_filepath = os.path.join(local_log_filedir, "job_worker.sdswatch.log")
-    else:
-      local_log_filepath = os.path.join(local_log_filedir, "pge.sdswatch.log")
+    # create one
+    os.makedirs(file_dir, exist_ok = True)
+    file_path = os.path.join(file_dir, name + ".sdswatch.log")
 
-    # by default, SDS Watch Logger uses info level for logging
-    level = logging.INFO
-
-    # define the log format. By default, python logging module already provides
-    # timestamp when logging
+    # define the log format. By default, python logging module already
+    # provides timestamp when logging
     log_format = ("\'%(asctime)s.%(msecs)03d\',"
                   "\'" + host + "\',"
                   "\'" + source_type + "\',"
@@ -59,31 +51,68 @@ class SDSWatchLogger:
                   "%(metric_value)s")
     datefmt = '%Y-%m-%d %H:%M:%S'
     formatter = logging.Formatter(log_format, datefmt=datefmt)
+    SDSWatchLogger.__configure_logger(file_path, formatter)
 
-    # specify where to send the log, and make sure to use defined formatter
-    # to process it
-    sdswatch_handler = logging.FileHandler(filename = local_log_filepath)
+
+  @staticmethod
+  def configure_pge_logger(file_dir, name):
+    """
+    Configure a logger to write log lines to /file_dir/name.pge.sdswatch.log with
+    format <timestamp>, <metric_key>, <metric_value>
+
+    Args:
+      file_dir (str): a full path to where to store the log file
+      name (str): name of the log
+    """
+    
+    if SDSWatchLogger.__sdswatch_configured:
+      raise Exception("SDS Watch has already been configured, and it cannot be configured again")
+
+    SDSWatchLogger.__sdswatch_configured = True
+    
+    # if the directory containing the output log file doesn't exist,
+    # create one
+    os.makedirs(file_dir, exist_ok = True)
+    file_path = os.path.join(file_dir, name + ".pge.sdswatch.log")
+
+    # define the log format. By default, python logging module already provides
+    # timestamp when logging
+    log_format = ("\'%(asctime)s.%(msecs)03d\',"
+                  "%(metric_key)s,"
+                  "%(metric_value)s")
+    datefmt = '%Y-%m-%d %H:%M:%S'
+    formatter = logging.Formatter(log_format, datefmt=datefmt)
+    SDSWatchLogger.__configure_logger(file_path, formatter)
+
+  @staticmethod
+  def __configure_logger(file_path, formatter):
+    # By default, SDSWatch use INFO level for logging
+    level = logging.INFO
+    
+    # specify where to send the log, and make sure to use formatter to format it
+    sdswatch_handler = logging.FileHandler(filename = file_path)
     sdswatch_handler.setLevel(level)
     sdswatch_handler.setFormatter(formatter)
 
-    # configure SDS Watch Logger with the above information
+    # configure SDS Watch Logger with the above handler
     SDSWatchLogger.__logger.setLevel(level)
     SDSWatchLogger.__logger.addHandler(sdswatch_handler)
     logging.Formatter.converter = time.gmtime
-    SDSWatchLogger.__sdswatch_configured = True
+    
     
   @staticmethod
   def log(metric_key, metric_value):
     """
-    Write a log line to the file specified in the constructor. In particular,
-    here is the schema or structure of the log line inside that file:
-       <timestamp>,<host>,<source_type>,<source_id>,<metric_key>,<metric_value>
-    Since key token and value token  are flexible values, developers need to provide them
- 
+    Write a log line with given format to the file created in configuration methods.
+    
     Args:
       metric_key (str or number): value of key token
       metric_value (str or number): value of value token
+
+    Note:
+      use double quote to allow comma within metric_value
     """
+    
     if not SDSWatchLogger.__sdswatch_configured:
       raise Exception("Please configure SDS Watch Logger before logging")
 

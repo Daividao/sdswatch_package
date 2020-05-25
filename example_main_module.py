@@ -1,31 +1,13 @@
 from sdswatch.sdswatchlogger import SDSWatchLogger as sdsw_logger
-from example_auxiliary_module import download, preprocess
+from example_auxiliary_module import download
 
-if __name__ == '__main__':
-  # instantiate SDS Watch Logger for the first time.
-  # IMPORTANT NOTE: SDS Watch assumes the log file is contained in
-  # the job directory, so it's important that you have a main module
-  # is also contained in the job directory, and instantiate the SDS Watch Logger
-  # with the absolute path to the current directory of the main module.
-  # For example:
-  # if your job name is "job1", then in Verdi, you'll have
-  # "jobs/2020/03/17/07/35/job1/example_main_module.py
-  # then SDS Watch Logger will send log to
-  # "jobs/2020/03/17/07/35/job1/"sdswatch.log"
-  # Other paths won't work.
-  import os 
-  sdsw_logger.configure(component = "optimization",
-                        component_id = "optimization_xlk2",
-                        local_log_filedir = os.path.dirname(os.path.abspath(__file__)))
-  # logging to sdswatch
-  sdsw_logger.log("step", "start_main")
-  
-  # go to another module, please open example_auxiliary_module.py to see how SDSWatchLogger is
-  # called in different modules from the main
+sdsw_logger.configure_pge_logger("/Users/trandaod/Desktop/jpl/", "example_hello_world")
+
+if __name__ == "__main__":
+  print("ok")
+  sdsw_logger.log("key1", "value1")
   download()
-  preprocess()
-
-  # logging to sdswatch
-  sdsw_logger.log("step", "end_main")
+  sdsw_logger.log("key2", "value2")
+  
 
 
