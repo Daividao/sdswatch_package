@@ -5,7 +5,6 @@ SDSWatch Logging module for PGE to emit log in format
 
 import os
 import logging
-import urllib.request
 import time
 
 class PGESDSWatchLogger:
