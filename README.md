@@ -20,8 +20,10 @@ logger = SDSWatchLogger(file_dir="/path/to/dir",
 logger = SDSWatchLogger.get_logger()
 
 # to log 
-logger.log(metric_key="key",
-           metric_value="value")
+logger.log(metric_key="key1", metric_value="value1")
+logger.log(metric_key="key2", metric_value="value2")
+logger.log(metric_key="key3", metric_value="value3")
+
 ```
 Example generic type logs:
 Example pge type logs:
@@ -41,9 +43,10 @@ logger = PGESDSWatchLogger(file_dir="/path/to/dir",
 # to use the logger in other modules after the first instantiation
 logger = PGESDSWatchLogger.get_logger()
 
-# to log 
-logger.log(metric_key="key",
-           metric_value="value")
+# to log
+logger.log(metric_key="key1", metric_value="value1")
+logger.log(metric_key="key2", metric_value="value2")
+logger.log(metric_key="key3", metric_value="value3")
 ```
 Example pge type logs:
 ```
