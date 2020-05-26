@@ -26,12 +26,13 @@ class SDSWatchLogger:
             raise Exception("SDSWatchLogger already existed. Please use SDSWatchLogger.get_sdsw_logger() instead")
         
         # use Python logging module to log
-        self._logger = self.__get_logger(file_dir, name, source_type, source_id)
+        self._logger = SDSWatchLogger.__get_logger(file_dir, name, source_type, source_id)
  
         # restrict the instantiation of a class to one "single" instance
         SDSWatchLogger.__sdsw_logger = self
         
-    def __get_logger(self, file_dir, name, source_type, source_id):
+    @staticmethod
+    def __get_logger(file_dir, name, source_type, source_id):
         """
         Configures Python logger
         """
