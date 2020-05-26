@@ -1,5 +1,10 @@
 # SDSWatchLogger Package
 
+## Install
+```
+pip3 install git+https://github.com/hysds/hysds-sdswatch.git@master
+```
+
 ## Methods that SDSWatchLogger provides
 For generic type:
 ```
@@ -7,9 +12,9 @@ from sdswatch.logger import SDSWatchLogger
 
 # you can only instantiate once
 logger = SDSWatchLogger(file_dir="/path/to/dir", 
-                     name="logname", 
-                     source_type="source_type", 
-                     source_id="source_id")
+                        name="logname", 
+                        source_type="source_type", 
+                        source_id="source_id")
 
 # to use the logger in other modules after the first instantiation
 logger = SDSWatchLogger.get_logger()
@@ -18,13 +23,20 @@ logger = SDSWatchLogger.get_logger()
 logger.log(metric_key="key",
            metric_value="value")
 ```
+Example generic type logs:
+Example pge type logs:
+```
+'2020-05-25 01:52:40.569',100.20.1.18,source_type,source_id,key1,value1
+'2020-05-25 01:52:40.569',100.20.1.18,source_type,source_id,key2,value2
+'2020-05-25 01:52:40.569',100.20.1.18,source_type,source_id,key3,value3
+```
 For pge type:
 ```
 from sdswatch.pgelogger import PGESDSWatchLogger
 
 # you can only instantiate once
 logger = PGESDSWatchLogger(file_dir="/path/to/dir", 
-                         name="job_type")
+                           name="job_type")
 
 # to use the logger in other modules after the first instantiation
 logger = PGESDSWatchLogger.get_logger()
@@ -32,4 +44,10 @@ logger = PGESDSWatchLogger.get_logger()
 # to log 
 logger.log(metric_key="key",
            metric_value="value")
+```
+Example pge type logs:
+```
+'2020-05-25 01:52:40.569',key1,value1
+'2020-05-25 01:52:40.570',key2,value2
+'2020-05-25 01:52:40.570',key3,value3
 ```
