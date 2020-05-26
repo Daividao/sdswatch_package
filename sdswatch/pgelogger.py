@@ -20,7 +20,7 @@ class PGESDSWatchLogger:
           file_dir (str): a full path to where to store the log file
           name (str): name of the log
         """
-        if logging.getLogger("pgesdswatch").hasHandlers():
+        if PGESDSWatchLogger.__pge_sdsw_logger == None:
             raise Exception("PGESDSWatchLogger already existed. Please use PGESDSWatchLogger.get_sdsw_logger() instead")
         
         # use Python logging module to log

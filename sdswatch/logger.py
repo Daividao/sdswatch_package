@@ -22,7 +22,7 @@ class SDSWatchLogger:
           source_type (str): type of log
           source_id (str): id of log
         """
-        if logging.getLogger("sdswatch").hasHandlers():
+        if SDSWatchLogger.__sdsw_logger == None:
             raise Exception("SDSWatchLogger already existed. Please use SDSWatchLogger.get_sdsw_logger() instead")
         
         # use Python logging module to log
