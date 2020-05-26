@@ -25,7 +25,7 @@ logger.log(metric_key="key2", metric_value="value2")
 logger.log(metric_key="key3", metric_value="value3")
 
 ```
-Example generic type logs:
+Example generic type logs (log file will be created by the logger):
 ```
 '2020-05-25 01:52:40.569',100.20.1.18,source_type,source_id,key1,value1
 '2020-05-25 01:52:40.569',100.20.1.18,source_type,source_id,key2,value2
@@ -47,7 +47,7 @@ logger.log(metric_key="key1", metric_value="value1")
 logger.log(metric_key="key2", metric_value="value2")
 logger.log(metric_key="key3", metric_value="value3")
 ```
-Example pge type logs:
+Example pge type logs (log file will be created by the logger):
 ```
 '2020-05-25 01:52:40.569',key1,value1
 '2020-05-25 01:52:40.570',key2,value2
