@@ -78,7 +78,7 @@ class PGESDSWatchLogger:
     @staticmethod
     def get_logger():
         """
-        Returns PGESDSWatchLogger if already instantiated
+        Returns an PGESDSWatchLogger instance if one already existed
         """
         if PGESDSWatchLogger.__pge_sdsw_logger == None:
             raise Exception("PGESDSWatchLogger hasn't existed. Please instantiate it first !")
