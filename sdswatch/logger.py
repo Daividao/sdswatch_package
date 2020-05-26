@@ -13,7 +13,7 @@ class SDSWatchLogger:
     
     def __init__(self, file_dir, name, source_type, source_id):
         """
-        Configures a logger to write log lines to /file_dir/name.pge.sdswatch.log with
+        Configures a logger to write log lines to /file_dir/name.sdswatch.log with
         format <timestamp>, <host>, <source_type>, <source_id>, <metric_key>, <metric_value>
 
         Args:
