@@ -1,0 +1,18 @@
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /verdi/*.sdswatch.log 
+  close_inactive: 335h
+  ignore_older: 336h
+  clean_inactive: 337h
+  scan_frequency: 10s
+  fields:
+    type: "worker"
+
+#output.redis:
+#  hosts: ["100.67.35.12:6379"]
+#  key: "filebeat"
+
+output.console:
+  pretty: true

@@ -1,0 +1,24 @@
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /jobs/*/*/*/*/*/*/pge.sdswatch.log
+  close_inactive: 335h
+  ignore_older: 336h
+  clean_inactive: 337h
+  scan_frequency: 10s
+  fields:
+    type: "pge"
+    host: ${HOST} 
+
+# WARNING: when you migrate the filter part in sdswatch logstash client to sdswatch logstash server
+# don't just copy straight away the filter code.
+# In the current sdswatch logstash client, HOST is environment variable 
+# while after 
+
+#output.redis:
+#  hosts: ["100.67.35.12:6379"]
+#  key: "filebeat"
+
+output.console:
+  pretty: true

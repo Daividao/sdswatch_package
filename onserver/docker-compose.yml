@@ -1,0 +1,54 @@
+version: '3.2'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.1.1
+    container_name: sdswatch-elasticsearch
+    user: root
+    expose:
+      - "9200"
+    environment:
+      - discovery.type=single-node
+    volumes:
+      - /export/home/hysdsops/tmp/sdswatch-server/data:/usr/share/elasticsearch/data
+
+  kibana:
+    depends_on:
+      - elasticsearch
+    image: docker.elastic.co/kibana/kibana:7.1.1
+    container_name: sdswatch-kibana
+    links:
+      - elasticsearch
+    ports:
+      - ${KIB}:5601
+ 
+  configure_kibana:
+    depends_on:
+      - kibana
+      - elasticsearch
+    build: ./load-kibana-dashboard
+    container_name: sdswatch-load-kibana-dashboard
+    links:
+      - elasticsearch
+    command: ['/usr/share/kibana/dashboard/load-kibana-dashboard.sh']
+
+  redis:
+    image: "redis:5.0.8"
+    container_name: sdswatch-redis
+    links:
+      - elasticsearch
+    ports:
+      - ${REDIS}:6379
+
+  logstash:
+    depends_on:
+      - elasticsearch
+      - redis
+    image: docker.elastic.co/logstash/logstash:7.1.1
+    container_name: sdswatch-logstash
+    links:
+      - elasticsearch
+    volumes:
+      - type: bind
+        source: ./conf
+        target: /usr/share/logstash/config/conf
+    command: logstash -f /usr/share/logstash/config/conf/logstash.conf --config.reload.automatic
