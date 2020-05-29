@@ -2,8 +2,8 @@
 
 ## Content
 ### 1. SDSWatchLogger Package (in sdswatch directory)
-### 2. Install SDSWatch on client side (in onclient directory)
-### 3. Install SDSWatch on server side (in onserver directory)
+### 2. Install SDSWatch on client side (in onclient directory) (under development)
+### 3. Install SDSWatch on server side (in onserver directory) (under development)
 
 
 ## 1. SDSWatchLogger Package (in sdswatch directory)
