@@ -61,5 +61,9 @@ Example pge type logs (log file will be created by the logger):
 '2020-05-25 01:52:40.570',key2,value2
 '2020-05-25 01:52:40.570',key3,value3
 ```
+
 ## 2. Install SDSWatch on client side (in onclient directory)
+Read SDSWatch Wiki
+
 ## 3. Install SDSWatch on server side (in onserver directory)
+Read SDSWatch Wiki.
