@@ -1,5 +1,0 @@
-filebeat.config.inputs:
-  enabled: true
-  path: filebeat-configs/*.yml
-  reload.enabled: true
-  reload.period: 10s
