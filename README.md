@@ -6,14 +6,14 @@
 ### 3. Install SDSWatch on server side (in onserver directory)
 
 
-# 1. SDSWatchLogger Package (in sdswatch directory)
+## 1. SDSWatchLogger Package (in sdswatch directory)
 
-## Install
+### Install
 ```
 pip3 install git+https://github.com/hysds/hysds-sdswatch.git@master
 ```
 
-## Methods that SDSWatchLogger provides
+### Methods that SDSWatchLogger provides
 For generic type:
 ```
 from sdswatch.logger import SDSWatchLogger
