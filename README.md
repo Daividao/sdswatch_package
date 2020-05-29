@@ -1,4 +1,4 @@
-# SDSWatchLogger Package
+# SDSWatchLogger Package (in sdswatch directory)
 
 ## Install
 ```
