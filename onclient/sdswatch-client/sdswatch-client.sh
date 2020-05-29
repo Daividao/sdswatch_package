@@ -4,6 +4,10 @@
 docker stop sdswatch-client
 docker rm sdswatch-client
 
+# create a docker container with logstash
+# use --config.reload.automatic to make sure that everytime
+# logstash configuration is updated, logstash will restart 
+# the pipeline
 docker run --name sdswatch-client \
 --rm \
 -u $(id -u):$(id -g) \
