@@ -63,7 +63,7 @@ Example pge type logs (log file will be created by the logger):
 ```
 
 ## 2. Install SDSWatch on client side (in onclient directory)
-Read SDSWatch Wiki
+Read SDSWatch Wiki: https://hysds-core.atlassian.net/wiki/spaces/HYS/pages/548634892/SDSWatch
 
 ## 3. Install SDSWatch on server side (in onserver directory)
-Read SDSWatch Wiki.
+Read SDSWatch Wiki: https://hysds-core.atlassian.net/wiki/spaces/HYS/pages/548634892/SDSWatch
